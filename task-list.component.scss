@@ -1,0 +1,250 @@
+@import "../../../assets/styles/variables";
+@import "../../../assets/styles/mixins";
+
+:host {
+  flex: 1;
+}
+
+/* TASK COMPONENT */
+.task-component {
+  height: 98%;
+  background-color: $task-component-background-color;
+
+  ::ng-deep {
+    .details {
+      background-color: #fff;
+      box-shadow: -8px 0 8px 0 rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  /*  SIDEBAR */
+  tm-sidebar {
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+      i {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  /* TASK SECTION */
+  .task-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    /* GRID SECTION */
+    .grid-section {
+      margin-left: 1rem;
+      margin-right: 1rem;
+      flex: 1;
+
+      .full-height {
+        height: 100%;
+        box-shadow: unset;
+      }
+
+      /* THIS STYLES USED FOR DATATABLE */
+      ::ng-deep {
+        .datatable-header {
+          background-color: $datatable-element-background-color;
+        }
+
+        /* THIS STYLE USED FOR HEADER SORTING ICONS */
+
+        .ngx-datatable {
+          .sortable .sort-btn:before {
+            font-family: data-table;
+            padding-left: 0.5rem;
+            content: "c";
+          }
+          .sortable .sort-btn.datatable-icon-down:before {
+            content: "f";
+          }
+          .sortable .sort-btn.datatable-icon-up:before {
+            content: "e";
+          }
+        }
+
+        .datatable-header-cell {
+          padding: 1.2rem 0rem;
+          background-color: $datatable-element-background-color;
+          color: $datatable-heading-text-color;
+          font-weight: bold;
+        }
+
+        .center-text {
+          text-align: center;
+        }
+
+        .datatable-body-row {
+          border-bottom: 1px solid $datatable-element-background-color;
+          &.active {
+            box-shadow: 0px 0px 10px 5px #c0c0c0;
+          }
+        }
+
+        .datatable-body-cell {
+          font-size: 1rem;
+          padding: 0.9rem 0rem;
+        }
+
+        .datatable-body-cell-label {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          .status {
+            position: relative;
+            visibility: hidden;
+            width: 0.2rem;
+            height: 100%;
+            display: inline-block;
+
+            &-visible {
+              visibility: visible;
+            }
+          }
+        }
+
+        .wide-tool-tip {
+          .tooltip-inner {
+            max-width: 300px;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* MIXIN FOR TASK STATUS MARKER */
+@mixin status-marker() {
+  position: absolute;
+  top: -0.9rem;
+  height: calc(100% + 1.8rem);
+}
+
+/* STATUS MARKER FOR OVERDUE TASK */
+.overdue {
+  border: 1px solid $overdue-task-marker-color;
+  @include status-marker();
+}
+
+.new {
+  border: 1px solid $new-task-marker-color;
+  @include status-marker();
+}
+
+.id-header-template {
+  span {
+    padding-right: 0.5rem;
+  }
+}
+
+/* TASK TEMPLATE */
+.task-template {
+  .new-dot {
+    @include dot();
+    background-color: $mark-color;
+  }
+
+  .overdue-dot {
+    @include dot();
+    background-color: $overdue-mark-color;
+  }
+
+  .task-type {
+    background-color: $primary-header-text-background-color;
+    color: $referral-label-color;
+    padding: 0.2rem 1rem 0.2rem 1rem;
+    border-radius: 1rem 1rem 1rem 1rem;
+  }
+}
+
+.task-description {
+  color: $secondary-text-color;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 250px;
+  white-space: nowrap;
+}
+
+/* ID TEMPLATE */
+.id-template {
+  color: $primary-text-color;
+}
+
+/* PATIENT TEMPLATE */
+.patient-template {
+  span {
+    padding-right: 0.5rem;
+  }
+}
+
+/* PATIENT TEMPLATE */
+.patient-id {
+  color: $secondary-text-color;
+}
+
+/* MENU TEMPLATE */
+.menu-template {
+  display: flex;
+  i {
+    padding-right: 2rem;
+    font-size: 1.3rem;
+    color: $row-icon-color;
+    opacity: 0.7;
+  }
+
+  .dropdown-select {
+    position: absolute;
+
+    .dropdown-btn {
+      &:focus,
+      &:active {
+        outline: none;
+        box-shadow: none;
+        color: $select-property-color;
+      }
+      padding: 0rem 0.3rem;
+      color: $row-icon-color;
+      background-color: #fff;
+      vertical-align: initial;
+      border: 0.1rem solid $row-icon-color;
+      opacity: 0.7;
+    }
+
+    .menu-color {
+      color: $select-property-color;
+    }
+  }
+}
+
+/* PRIORITY TEMPLATE */
+.priority-template {
+  width: 100%;
+  height: 100%;
+  @include flex-row();
+
+  .low-priority {
+    color: red;
+  }
+
+  .norm-priority {
+    color: green;
+  }
+
+  .high-priority {
+    color: magenta;
+  }
+}
+
+/* ASSIGNED TEMPLATE */
+.assigned-template {
+  width: 100%;
+  height: 100%;
+  @include flex-row();
+  img {
+    width: 3rem;
+  }
+}

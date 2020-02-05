@@ -1,0 +1,160 @@
+<div class="task-component">
+  <section class="task-section">
+    <!-- SEARCH SECTION -->
+    <tm-task-search
+      class="search-section"
+      [types]="types"
+      [views]="views"
+      [filters]="filters"
+      (filterByTypeEvent)="filterByType($event)"
+      (filterByViewEvent)="filterByView($event)"
+      (searchTaskEvent)="searchTask($event)"
+      (createTaskEvent)="createNewTask($event)"
+    >
+    </tm-task-search>
+
+    <!-- TASK LIST -->
+    <section class="grid-section">
+      <ngx-datatable
+        class="material full-height"
+        [columnMode]="ColumnMode.flex"
+        headerHeight="50"
+        footerHeight="0"
+        rowHeight="auto"
+        [columns]="columns"
+        [rows]="rows"
+        [scrollbarV]="true"
+        [virtualization]="false"
+        [selectionType]="SelectionType.single"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+      >
+      </ngx-datatable>
+
+      <!--  NG-TEMPLATES FOR NGX-DATATABLE CLOUMNS -->
+      <ng-template #statusMarkerRef let-row="row">
+        <div
+          class="status"
+          [class.status-visible]="
+            activeRowId === row.id || selectedTaskId === row.id
+          "
+        >
+          <!--    <div
+          [ngClass]="row.task.dueDays.split(' ', 1) > '32' ? 'overdue' : 'new'"
+          ></div> -->
+        </div>
+      </ng-template>
+
+      <ng-template #idTemplate let-id="row.id">
+        <div class="id-template">{{ id }}</div>
+      </ng-template>
+
+      <ng-template #taskTemplate let-task="row">
+        <div>
+          <div class="task-template">
+            <span class="task-type">{{ task.task_type }}</span>
+            <!--    <span
+              [ngClass]="task.dueDays.split(' ', 1) > '32' ? 'overdue-dot' : 'new-dot'"
+            ></span> -->
+            <span>{{ priority }}</span>
+          </div>
+          <div
+            class="task-description"
+            tooltipClass="wide-tool-tip"
+            placement="bottom"
+            ngbTooltip="{{ task.description }}"
+          >
+            {{ task.description }}
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #patientTemplate let-patient="row">
+        <div>
+          <div class="patient-template">
+            <span>{{ patient.patient_name }}</span>
+            <!--    <span>{{ patient.priority }}</span> -->
+          </div>
+          <div>
+            <span class="patient-id"> {{ priority }}</span>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #providerTemplate let-provider="row">
+        <div>
+          <span>{{ provider.provider_id }}</span>
+        </div>
+      </ng-template>
+
+      <ng-template #priorityTemplate let-priority="row.priority">
+        <div class="priority-template">
+          <i class="fa fa-flag fa-1x"></i>
+        </div>
+      </ng-template>
+
+      <ng-template #assignedTemplate let-assignedTo="row.assignedTo">
+        <div class="assigned-template">
+          <img [src]="assignedTo" alt="assigned" />
+        </div>
+      </ng-template>
+
+      <ng-template #menuTemplate>
+        <div class="menu-template">
+          <div>
+            <i
+              class="fas fa-comment-dots"
+              placement="top"
+              ngbTooltip="Communication History"
+              (click)="viewCommunicationHistory()"
+            ></i>
+          </div>
+          <div class="view-details">
+            <i
+              class="fa fa-list"
+              placement="top"
+              ngbTooltip="View Details"
+              (click)="taskDetails()"
+            ></i>
+          </div>
+          <div>
+            <div class="dropdown-select">
+              <div ngbDropdown class="d-inline-block">
+                <button
+                  class="btn dropdown-btn btn-outline-primary"
+                  ngbDropdownToggle
+                ></button>
+                <div ngbDropdownMenu>
+                  <button
+                    ngbDropdownItem
+                    class="menu-color"
+                    *ngFor="let menu of menus"
+                    (click)="onMenuSelect($event.target.value)"
+                    [value]="menu"
+                  >
+                    {{ menu }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </section>
+  </section>
+
+  <!-- SIDEBAR -->
+  <tm-sidebar #sidebar>
+    <div class="button-container">
+      <i (click)="onSidebarClose()" class="fas fa-times fa-2x"></i>
+    </div>
+    <tm-task-detail
+      *ngIf="viewTaskDetails"
+      [selected]="selected"
+    ></tm-task-detail>
+    <tm-communication-history
+      *ngIf="viewCommHistory"
+    ></tm-communication-history>
+    <tm-create-task *ngIf="createTask" (closeTaskEvent)="onSidebarClose()"></tm-create-task>
+  </tm-sidebar>
+</div>
